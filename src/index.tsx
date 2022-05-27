@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { ThemeProvider } from 'next-themes';
 import reportWebVitals from './reportWebVitals';
-import { darkTheme } from './stitches.config';
+import { orangeTheme } from './stitches.config';
 import Router from './router';
 
 export default function App() {
@@ -12,7 +12,7 @@ export default function App() {
             defaultTheme='system'
             value={{
                 light: 'light',
-                dark: darkTheme.className,
+                orange: orangeTheme.className,
             }}
         >
             <Router />

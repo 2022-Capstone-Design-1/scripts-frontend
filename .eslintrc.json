@@ -19,6 +19,8 @@
         "import/no-unresolved": "off",
         "import/extensions": ["off"],
         "no-console": 0,
-        "no-alert": 0
+        "no-alert": 0,
+        "import/no-dynamic-require": ["off"],
+        "global-require": ["off"]
     }
 }
