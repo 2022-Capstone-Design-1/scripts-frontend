@@ -29,7 +29,7 @@ const GlobalStyles = globalCss({
     body: {
         background: '$background',
         color: '$text',
-        margin: 0,
+        margin: '0',
     },
 });
 

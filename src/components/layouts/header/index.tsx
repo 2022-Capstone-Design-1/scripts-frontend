@@ -8,8 +8,12 @@ const Container = styled('div', {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    '@md': {},
-    '@lg': {},
+    height: '4rem',
+    position: 'sticky',
+    top: '0',
+    zIndex: 101,
+    backgroundColor: '$background',
+    '@lg': { height: '5rem' },
 });
 
 const Bulb = styled(BiBulb, {
@@ -20,7 +24,7 @@ const Bulb = styled(BiBulb, {
 });
 
 const Logo = styled('img', {
-    margin: '0.8rem 2rem',
+    margin: '0 2rem',
     width: '4rem',
     height: '2rem',
     cursor: 'pointer',
@@ -32,9 +36,7 @@ export default function Header() {
     const toggleTheme = () => setTheme(theme === 'light' ? 'orange' : 'light');
     return (
         <Container>
-            <div>
-                <Logo src={require(`../../../assets/images/${theme}logo.png`)} alt='Logo' />
-            </div>
+            <Logo src={require(`../../../assets/images/${theme}logo.png`)} alt='Logo' />
             <Bulb onClick={toggleTheme} />
         </Container>
     );
