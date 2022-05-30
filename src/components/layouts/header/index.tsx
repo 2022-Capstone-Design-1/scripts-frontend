@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTheme } from 'next-themes';
 import { BiBulb } from 'react-icons/bi';
+import { useNavigate } from 'react-router-dom';
 import { styled } from '../../../stitches.config';
 
 const Container = styled('div', {
@@ -31,12 +32,18 @@ const Logo = styled('img', {
     '@lg': { width: '5rem', height: '2.5rem' },
 });
 
-export default function Header() {
+export default function Header(): JSX.Element {
     const { theme, setTheme } = useTheme();
     const toggleTheme = () => setTheme(theme === 'light' ? 'orange' : 'light');
+    const navigate = useNavigate();
+
     return (
         <Container>
-            <Logo src={require(`../../../assets/images/${theme}logo.png`)} alt='Logo' />
+            <Logo
+                src={require(`../../../assets/images/${theme}logo.png`)}
+                alt='Logo'
+                onClick={() => navigate('/')}
+            />
             <Bulb onClick={toggleTheme} />
         </Container>
     );

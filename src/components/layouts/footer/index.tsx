@@ -46,7 +46,7 @@ const Location = styled('div', {
 const email = 'rjsduf0503@gmail.com';
 const site = 'https://github.com/2022-CNU-Capstone-Design-1/scripts-frontend';
 
-export default function Footer() {
+export default function Footer(): JSX.Element {
     const handleMailClick = () => {
         alert(`${email}이 복사되었습니다.`);
     };
