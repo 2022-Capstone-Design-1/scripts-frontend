@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './pages/home';
-import Download from './pages/download';
+import Script from './pages/script';
 import { styled } from './stitches.config';
 import Header from './components/layouts/header';
 import Footer from './components/layouts/footer';
@@ -21,7 +21,7 @@ export default function Router(): JSX.Element {
             <Wrapper>
                 <Routes>
                     <Route path='/' element={<Home />} />
-                    <Route path='/download/:id' element={<Download />} />
+                    <Route path='/script/:id' element={<Script />} />
                 </Routes>
             </Wrapper>
             <Footer />

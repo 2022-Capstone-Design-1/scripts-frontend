@@ -21,6 +21,7 @@ const Bulb = styled(BiBulb, {
     height: '1.5rem',
     width: '1.5rem',
     margin: '0 2rem',
+    cursor: 'pointer',
     '@lg': { width: '1.8rem', height: '1.8rem' },
 });
 
