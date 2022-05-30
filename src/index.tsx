@@ -4,10 +4,8 @@ import { ThemeProvider } from 'next-themes';
 import reportWebVitals from './reportWebVitals';
 import { orangeTheme } from './stitches.config';
 import Router from './router';
-import Header from './components/layouts/header';
-import Footer from './components/layouts/footer';
 
-export default function App() {
+export default function App(): JSX.Element {
     return (
         <ThemeProvider
             attribute='class'
@@ -17,9 +15,7 @@ export default function App() {
                 orange: orangeTheme.className,
             }}
         >
-            <Header />
             <Router />
-            <Footer />
         </ThemeProvider>
     );
 }

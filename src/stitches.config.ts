@@ -6,10 +6,6 @@ export const { styled, getCssText, createTheme, globalCss } = createStitches({
             text: '#FFA42B',
             background: 'white',
         },
-        translate: {
-            right: '24px',
-            left: '0',
-        },
     },
     media: {
         sm: '(min-width: 640px)',
