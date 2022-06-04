@@ -27,6 +27,14 @@ const GlobalStyles = globalCss({
         color: '$text',
         margin: '0',
     },
+    ul: {
+        listStyle: 'none',
+        margin: '0',
+        padding: '0',
+    },
+    li: {
+        listStyle: 'none',
+    },
 });
 
 GlobalStyles();

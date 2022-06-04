@@ -1,7 +1,10 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { BsTrash } from 'react-icons/bs';
 import { RiFileAddLine } from 'react-icons/ri';
+import { SpinnerDotted } from 'spinners-react';
 import { styled } from '../../stitches.config';
+import { uploadFile, getRandomID } from '../../api';
 
 const Container = styled('div', {
     width: '100%',
@@ -22,13 +25,13 @@ const Label = styled('label', {
     border: '0.15rem solid $text',
     borderRadius: '1rem',
     '@lg': { minHeight: 'calc(85vh - 5rem)' },
-    '&.Video-Dragging': {
+    '&.File-Dragging': {
         backgroundColor: '$text',
         color: '$background',
     },
 });
 
-const Videos = styled('div', {
+const Files = styled('div', {
     marginTop: '2rem',
     padding: '1rem',
     width: 'calc(100% - 2rem)',
@@ -36,13 +39,13 @@ const Videos = styled('div', {
     borderRadius: '0.5rem',
 });
 
-const AddVideo = styled(RiFileAddLine, {
+const AddFile = styled(RiFileAddLine, {
     width: '4rem',
     height: '4rem',
     '@lg': { width: '7.5rem', height: '7.5rem' },
 });
 
-const AddVideoText = styled('div', {
+const AddFileText = styled('div', {
     fontSize: '1.1rem',
     marginTop: '1rem',
     width: '80%',
@@ -54,7 +57,7 @@ const Trash = styled(BsTrash, {
     cursor: 'pointer',
 });
 
-const VideoContainer = styled('div', {
+const FileContainer = styled('div', {
     display: 'flex',
     justifyContent: 'space-between',
 });
@@ -62,15 +65,13 @@ const VideoContainer = styled('div', {
 const ButtonContainer = styled('div', {
     display: 'flex',
     justifyContent: 'space-between',
-    margin: '2rem 0 2rem 0.1rem',
+    margin: '2rem 0 2rem 0.2rem',
     width: '100%',
 });
 
 const Button = styled('span', {
     height: '4rem',
-    // lineHeight: '4rem',
     width: '40%',
-    // margin: '0 10%',
     border: '0.15rem solid $text',
     borderRadius: '0.2rem',
     display: 'flex',
@@ -83,57 +84,71 @@ const Button = styled('span', {
     },
 });
 
-interface IVideoTypes {
-    id: number;
+const Margin = styled('div', {
+    marginTop: '10rem',
+    '@lg': { marginTop: '6.5rem' },
+});
+
+interface IFileTypes {
     object: File;
 }
 
 export default function DragDrop(): JSX.Element {
+    const navigate = useNavigate();
+    const [loading, setLoading] = React.useState(false);
     const [isDragging, setIsDragging] = React.useState<boolean>(false);
-    const videoId = React.useRef<number>(0);
     const dragRef = React.useRef<HTMLLabelElement | null>(null);
-    const [videos, setVideos] = React.useState<IVideoTypes[]>([]);
+    const fileRef = React.useRef<HTMLInputElement | any>(null);
+    // 추후 다중 파일을 받을 수 있기 때문에 리스트로 구현
+    const [file, setFile] = React.useState<IFileTypes[]>([]);
 
-    const onChangeVideos = React.useCallback(
+    const onChangeFile = React.useCallback(
         (e: React.ChangeEvent<HTMLInputElement> | any): void => {
-            let selectedVideos: File[] = [];
-            let tempVideos: IVideoTypes[] = videos;
+            let selectedFiles: File[] = [];
+            let tempFile: IFileTypes[] = file;
 
-            selectedVideos = e.type === 'change' ? e.target.files : e.dataTransfer.files;
-
-            for (const sv of selectedVideos) {
-                let flag = true;
-                if (videos.length > 0) {
-                    for (const video of videos) {
-                        if (video.object.name === sv.name && video.object.size === sv.size) {
-                            flag = false;
-                            break;
-                        }
-                    }
-                } else flag = true;
-
-                if (flag) {
-                    tempVideos = [
-                        ...tempVideos,
-                        {
-                            id: (videoId.current += 1),
-                            object: sv,
-                        },
-                    ];
-                }
+            selectedFiles = e.type === 'change' ? e.target.files : e.dataTransfer.files;
+            if (selectedFiles.length > 1) {
+                alert('변환할 파일은 한 개만 등록 가능합니다.');
+            } else if (
+                !selectedFiles[0].type.includes('video/') &&
+                !selectedFiles[0].type.includes('audio/')
+            ) {
+                alert('파일은 반드시 동영상 또는 오디오 확장자로 제한됩니다.');
+            } else {
+                tempFile = [
+                    {
+                        object: selectedFiles[0],
+                    },
+                ];
             }
-
-            setVideos(tempVideos);
+            setFile(tempFile);
         },
-        [videos],
+        [file],
     );
 
-    const handleDeleteVideo = React.useCallback(
-        (id: number): void => {
-            setVideos(videos.filter((video: IVideoTypes) => video.id !== id));
-        },
-        [videos],
-    );
+    const handleResetClick = (): void => {
+        setFile([]);
+        fileRef.current.value = '';
+    };
+
+    const handleTransformClick = async () => {
+        if (file.length === 0) {
+            alert('변환할 파일을 등록해주세요.');
+        } else {
+            setLoading(true);
+            const randomID = new Date()
+                .getTime()
+                .toString()
+                .concat(getRandomID(1, 100000).toString());
+            const data = await uploadFile(file, randomID);
+            setFile([]);
+            navigate(`/script/${randomID}`, {
+                state: { script: JSON.parse(data) },
+            });
+        }
+        setLoading(false);
+    };
 
     const handleDragEnter = React.useCallback((e: DragEvent): void => {
         e.preventDefault();
@@ -161,10 +176,10 @@ export default function DragDrop(): JSX.Element {
             e.preventDefault();
             e.stopPropagation();
 
-            onChangeVideos(e);
+            onChangeFile(e);
             setIsDragging(false);
         },
-        [onChangeVideos],
+        [onChangeFile],
     );
 
     const subscribeDragEvents = React.useCallback((): void => {
@@ -190,64 +205,51 @@ export default function DragDrop(): JSX.Element {
         return () => unSubscribeDragEvents();
     }, [subscribeDragEvents, unSubscribeDragEvents]);
 
+    if (loading) {
+        return (
+            <>
+                <Margin />
+                <SpinnerDotted size='35%' color='#FFA42B' />
+            </>
+        );
+    }
+
     return (
         <Container>
             <input
                 type='file'
-                id='videoUpload'
+                id='fileUpload'
                 style={{ display: 'none' }}
-                multiple
-                accept='video/*'
-                onChange={onChangeVideos}
+                accept='video/*, audio/*'
+                ref={fileRef}
+                onChange={(e) => {
+                    onChangeFile(e);
+                }}
             />
             <Label
-                className={isDragging ? 'Video-Dragging' : 'Video'}
-                htmlFor='videoUpload'
+                className={isDragging ? 'File-Dragging' : 'File'}
+                htmlFor='fileUpload'
                 ref={dragRef}
             >
-                <AddVideo />
-                <AddVideoText>Select / Drag & Drop your video to transform</AddVideoText>
+                <AddFile />
+                <AddFileText>Select / Drag & Drop your file to transform</AddFileText>
             </Label>
 
-            {videos.length !== 0 && (
-                <Videos>
-                    {videos.map((video: IVideoTypes) => {
-                        const {
-                            id,
-                            object: { name },
-                        } = video;
-
-                        return (
-                            <VideoContainer key={id}>
-                                <span>{name}</span>
-                                <Trash onClick={() => handleDeleteVideo(id)} />
-                            </VideoContainer>
-                        );
-                    })}
-                </Videos>
+            {file.length !== 0 && (
+                <Files>
+                    <FileContainer>
+                        <span>{file[0].object.name}</span>
+                        <Trash onClick={handleResetClick} />
+                    </FileContainer>
+                </Files>
             )}
 
             <ButtonContainer>
-                <Button
-                    aria-hidden='true'
-                    onClick={() => {
-                        videos.map((video: IVideoTypes) => console.log(video));
-                        // todo:
-                        // upload to server
-                        // setVideo([]);
-                        // response에 따라 page 이동
-                        // loading 중 일 때 화면 구현?
-                    }}
-                >
+                <Button aria-hidden='true' onClick={() => handleTransformClick()}>
                     Transform
                 </Button>
-                <Button
-                    aria-hidden='true'
-                    onClick={() => {
-                        setVideos([]);
-                    }}
-                >
-                    Delete All
+                <Button aria-hidden='true' onClick={handleResetClick}>
+                    Delete
                 </Button>
             </ButtonContainer>
         </Container>
