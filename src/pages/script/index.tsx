@@ -15,10 +15,10 @@ const Container = styled('div', {
 });
 
 export default function Script(): JSX.Element {
-    const params = useParams();
     const script: any = useLocation().state;
-    console.log('script', script);
-    console.log(params);
-
-    return <Container>{script ? <Table script={script} /> : <div>1</div>}</Container>;
+    return (
+        <Container>
+            <Table script={script} />
+        </Container>
+    );
 }

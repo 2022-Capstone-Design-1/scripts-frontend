@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from 'next-themes';
 import { BsTrash } from 'react-icons/bs';
 import { RiFileAddLine } from 'react-icons/ri';
 import { SpinnerDotted } from 'spinners-react';
@@ -95,6 +96,7 @@ interface IFileTypes {
 
 export default function DragDrop(): JSX.Element {
     const navigate = useNavigate();
+    const { theme } = useTheme();
     const [loading, setLoading] = React.useState(false);
     const [isDragging, setIsDragging] = React.useState<boolean>(false);
     const dragRef = React.useRef<HTMLLabelElement | null>(null);
@@ -206,10 +208,11 @@ export default function DragDrop(): JSX.Element {
     }, [subscribeDragEvents, unSubscribeDragEvents]);
 
     if (loading) {
+        const loadingColor = theme === 'light' ? '#FFA42B' : 'white';
         return (
             <>
                 <Margin />
-                <SpinnerDotted size='35%' color='#FFA42B' />
+                <SpinnerDotted size='35%' color={loadingColor} />
             </>
         );
     }
