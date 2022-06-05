@@ -9,7 +9,6 @@ import Footer from './components/layouts/footer';
 const Wrapper = styled('div', {
     height: 'auto',
     minHeight: 'calc(100vh - 4rem)',
-    marginBottom: '5rem',
     zIndex: 0,
     '@lg': { minHeight: 'calc(100vh - 5rem)' },
 });

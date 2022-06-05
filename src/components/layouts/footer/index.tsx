@@ -13,6 +13,7 @@ const Container = styled('div', {
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',
+    marginTop: '5rem',
     '@lg': {},
 });
 

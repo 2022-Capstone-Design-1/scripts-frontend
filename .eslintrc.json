@@ -44,6 +44,7 @@
         "consistent-return": 0,
         "object-shorthand": 0,
         "react-hooks/rules-of-hooks": 0,
-        "array-callback-return": 0
+        "array-callback-return": 0,
+        "prefer-destructuring": 0
     }
 }

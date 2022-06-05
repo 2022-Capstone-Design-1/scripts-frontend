@@ -1,24 +1,46 @@
 import React from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { styled } from '../../stitches.config';
-import Table from '../../components/table';
+import ScriptContent from '../../components/script';
 
-const Container = styled('div', {
-    width: '70%',
-    height: 'auto',
-    minHeight: 'calc(90vh - 4rem)',
+const VideoContainer = styled('div', {
+    width: '90%',
+    minHeight: 'calc(97vh - 4rem)',
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
-    padding: '10vh 15% 0 15%',
-    '@lg': { minHeight: 'calc(90vh - 5rem)', width: '80%', padding: '10vh 10% 0 10%' },
+    padding: '3vh 5% 0 5%',
+    '@lg': {
+        minHeight: 'calc(80vh - 5rem)',
+        width: '90%',
+        padding: '10vh 5% 10vh 5%',
+        flexDirection: 'row',
+    },
+});
+
+const AudioContainer = styled('div', {
+    width: '90%',
+    minHeight: 'calc(97vh - 4rem)',
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '3vh 5% 0 5%',
+    '@lg': {
+        minHeight: 'calc(97vh - 5rem)',
+        flexDirection: 'column',
+    },
 });
 
 export default function Script(): JSX.Element {
-    const script: any = useLocation().state;
+    const data: any = useLocation().state;
+    if (data.type.includes('video/')) {
+        return (
+            <VideoContainer>
+                <ScriptContent data={data} />
+            </VideoContainer>
+        );
+    }
     return (
-        <Container>
-            <Table script={script} />
-        </Container>
+        <AudioContainer>
+            <ScriptContent data={data} />
+        </AudioContainer>
     );
 }
