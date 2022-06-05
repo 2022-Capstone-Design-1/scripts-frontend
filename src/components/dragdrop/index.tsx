@@ -144,9 +144,10 @@ export default function DragDrop(): JSX.Element {
                 .toString()
                 .concat(getRandomID(1, 100000).toString());
             const data = await uploadFile(file, randomID);
+            const fileType = file[0].object.type;
             setFile([]);
             navigate(`/script/${randomID}`, {
-                state: { script: JSON.parse(data) },
+                state: { script: JSON.parse(data), type: fileType },
             });
         }
         setLoading(false);

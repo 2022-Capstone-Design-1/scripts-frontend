@@ -35,6 +35,9 @@ const GlobalStyles = globalCss({
     li: {
         listStyle: 'none',
     },
+    // '*': {
+    //     boxSizing: 'border-box',
+    // },
 });
 
 GlobalStyles();
