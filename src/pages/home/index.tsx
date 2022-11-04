@@ -1,6 +1,6 @@
 import React from 'react';
-import { styled } from '../../stitches.config';
 import DragDrop from '../../components/dragdrop';
+import { styled } from '../../stitches.config';
 
 const Container = styled('div', {
     width: '70%',

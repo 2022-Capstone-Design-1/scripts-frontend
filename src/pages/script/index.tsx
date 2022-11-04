@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavigateOptions, useLocation } from 'react-router-dom';
-import { styled } from '../../stitches.config';
 import ScriptContent from '../../components/script';
+import { styled } from '../../stitches.config';
 import { TYPE_CHECK } from '../../utils/constants';
 
 const VideoContainer = styled('div', {

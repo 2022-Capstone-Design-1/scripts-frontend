@@ -1,4 +1,4 @@
-import { API_END_POINT, TYPE_CHECK, METHOD } from './constants';
+import { API_END_POINT, METHOD, TYPE_CHECK } from './constants';
 import { FileType } from './types';
 
 export const getRandomID = (min: number, max: number): number =>

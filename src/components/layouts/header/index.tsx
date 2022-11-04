@@ -1,5 +1,5 @@
-import React from 'react';
 import { useTheme } from 'next-themes';
+import React from 'react';
 import { BiBulb } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '../../../stitches.config';

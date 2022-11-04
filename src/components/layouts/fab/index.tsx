@@ -1,8 +1,8 @@
-import * as React from 'react';
+import { Add, Close, EmailOutlined, GitHub } from '@mui/icons-material';
 import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
-import { Add, Close, GitHub, EmailOutlined } from '@mui/icons-material';
 import { useTheme } from 'next-themes';
+import * as React from 'react';
 import { styled } from '../../../stitches.config';
 import { ADDRESS, EMAIL } from '../../../utils/constants';
 

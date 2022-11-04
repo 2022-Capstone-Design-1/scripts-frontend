@@ -1,9 +1,9 @@
+import { ThemeProvider } from 'next-themes';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { ThemeProvider } from 'next-themes';
 import reportWebVitals from './reportWebVitals';
-import { darkTheme } from './stitches.config';
 import Router from './router';
+import { darkTheme } from './stitches.config';
 
 export default function App(): JSX.Element {
     return (
