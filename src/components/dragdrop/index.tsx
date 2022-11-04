@@ -210,7 +210,7 @@ export default function DragDrop(): JSX.Element {
     }, [subscribeDragEvents, unSubscribeDragEvents]);
 
     if (loading) {
-        const loadingColor = theme === 'light' ? '#FFA42B' : 'white';
+        const loadingColor = theme === 'light' ? 'black' : 'white';
         return (
             <>
                 <Margin />

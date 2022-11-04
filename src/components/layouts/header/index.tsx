@@ -25,26 +25,23 @@ const Bulb = styled(BiBulb, {
     '@lg': { width: '1.8rem', height: '1.8rem' },
 });
 
-const Logo = styled('img', {
+const Logo = styled('h1', {
     margin: '0 2rem',
-    width: '4rem',
+    fontSize: '2rem',
+    letterSpacing: '-0.4rem',
     height: '2rem',
     cursor: 'pointer',
-    '@lg': { width: '5rem', height: '2.5rem' },
+    '@lg': { fontSize: '3rem', height: '3rem' },
 });
 
 export default function Header(): JSX.Element {
     const { theme, setTheme } = useTheme();
-    const toggleTheme = () => setTheme(theme === 'light' ? 'orange' : 'light');
+    const toggleTheme = () => setTheme(theme === 'light' ? 'dark' : 'light');
     const navigate = useNavigate();
 
     return (
         <Container>
-            <Logo
-                src={require(`../../../assets/images/${theme}logo.png`)}
-                alt='Logo'
-                onClick={() => navigate('/')}
-            />
+            <Logo onClick={() => navigate('/')}>VTS</Logo>
             <Bulb onClick={toggleTheme} />
         </Container>
     );
