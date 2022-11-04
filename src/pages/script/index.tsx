@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { NavigateOptions, useLocation } from 'react-router-dom';
 import { styled } from '../../stitches.config';
 import ScriptContent from '../../components/script';
 
@@ -30,7 +30,7 @@ const AudioContainer = styled('div', {
 });
 
 export default function Script(): JSX.Element {
-    const data: any = useLocation().state;
+    const data: NavigateOptions['state'] = useLocation().state;
     if (data.type.includes('video/')) {
         return (
             <VideoContainer>

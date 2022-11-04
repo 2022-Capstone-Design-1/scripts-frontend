@@ -1,43 +1,52 @@
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { url } from './url';
+import { API_END_POINT } from './url';
 
 interface IFileTypes {
     object: File;
 }
 
-export const getRandomID = (min: number, max: number) =>
+export const getRandomID = (min: number, max: number): number =>
     Math.floor(Math.random() * (max - min) + min);
 
-const customAxios = axios.create({
-    baseURL: `${url}`,
-    headers: {
-        'Content-Type': 'multipart/form-data',
-    },
-});
+const uploadFile = async (formData: FormData, url: string) => {
+    const options = {
+        method: 'POST',
+        body: formData,
+    };
 
-async function inferenceFile(randomID: string, type: string[]): Promise<any> {
-    // const navigate = useNavigate();
-    try {
-        const response = await customAxios.post(`/${type[0]}/inferenceAudio`, { id: randomID });
-        console.log(response);
-        return response.data;
-    } catch (error) {
-        console.log(error);
-        // navigate('/');
+    const res = await fetch(API_END_POINT + url, options);
+    const data = await res.json();
+
+    if (res.ok) {
+        console.log(data);
+    } else {
+        throw new Error(data);
     }
-}
+};
 
-export async function uploadFile(file: IFileTypes[], randomID: string): Promise<any> {
+const inferenceFile = async (id: string, url: string) => {
+    const options = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: id }),
+    };
+
+    const res = await fetch(API_END_POINT + url, options);
+    const resData = await res.json();
+
+    if (res.ok) {
+        return resData;
+    }
+    throw new Error(resData);
+};
+
+export const getScript = async (file: IFileTypes[], id: string) => {
     const formData = new FormData();
-    formData.append('id', randomID);
+    formData.append('id', id);
     formData.append('file', file[0].object);
     const type = file[0].object.type.includes('video/') ? ['video', 'Video'] : ['audio', 'Audio'];
-    try {
-        const response = await customAxios.post(`/${type[0]}/post${type[1]}`, formData);
-        console.log(response);
-        return await inferenceFile(randomID, type);
-    } catch (error) {
-        console.log(error);
-    }
-}
+
+    await uploadFile(formData, `/${type[0]}/post${type[1]}`);
+    const data = await inferenceFile(id, `/${type[0]}/inferenceAudio`);
+
+    return JSON.parse(data);
+};

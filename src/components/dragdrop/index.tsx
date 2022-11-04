@@ -5,7 +5,7 @@ import { BsTrash } from 'react-icons/bs';
 import { RiFileAddLine } from 'react-icons/ri';
 import { SpinnerDotted } from 'spinners-react';
 import { styled } from '../../stitches.config';
-import { uploadFile, getRandomID } from '../../api';
+import { getRandomID, getScript } from '../../api';
 
 const Container = styled('div', {
     width: '100%',
@@ -143,11 +143,12 @@ export default function DragDrop(): JSX.Element {
                 .getTime()
                 .toString()
                 .concat(getRandomID(1, 100000).toString());
-            const data = await uploadFile(file, randomID);
-            const fileType = file[0].object.type;
+            const data = await getScript(file, randomID);
+            const fileType: string = file[0].object.type;
+
             setFile([]);
             navigate(`/script/${randomID}`, {
-                state: { script: JSON.parse(data), type: fileType },
+                state: { script: data, type: fileType },
             });
         }
         setLoading(false);
@@ -169,7 +170,7 @@ export default function DragDrop(): JSX.Element {
         e.preventDefault();
         e.stopPropagation();
 
-        if (e.dataTransfer!.files) {
+        if (e.dataTransfer?.files) {
             setIsDragging(true);
         }
     }, []);

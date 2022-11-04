@@ -95,18 +95,29 @@ const SearchBar = styled('input', {
     },
 });
 
-const indexList = [{ name: 'Whole script' }, { name: 'Script by time' }, { name: 'Search' }];
+type scriptDataType = {
+    script: {
+        fullScript: string;
+        srcAddress: string;
+        summary: string;
+        timeTable: object[];
+    };
+    type: string;
+};
 
-export default function Script(props: { data: object }): JSX.Element {
+const indexList = [{ name: 'Whole script' }, { name: 'Script by time' }, { name: 'Summary' }];
+
+export default function Script(props: { data: scriptDataType }): JSX.Element {
     const playerRef = React.useRef<ReactPlayer | any>(null);
     const elementRef = React.useRef<HTMLElement | any>(null);
+
     const { data } = props;
+    const { script, type } = data;
+    const isVideo = type.includes('video/');
+
     const [tabbedIndex, setTabbedIndex] = React.useState(0);
     const [searchText, setSearchText] = React.useState('');
     const [videoPlaying, setVideoPlaying] = React.useState(false);
-    const isVideo = Object.values(data)[1].includes('video/');
-    const script = Object.values(Object.values(data)[0].script);
-    const srcAddress = Object.values(data)[0].srcAddress;
 
     const handleVideoMoveClick = (time: string) => {
         playerRef?.current.seekTo(Number(time), 'seconds');
@@ -117,7 +128,15 @@ export default function Script(props: { data: object }): JSX.Element {
         setSearchText(e.target.value);
     };
 
-    const renderSearch = () => {
+    const renderSummary = () => {
+        return <span>{script.summary}</span>;
+    };
+
+    const renderWholeScript = () => {
+        return <span>{script.fullScript}</span>;
+    };
+
+    const renderTimeTable = () => {
         return (
             <div>
                 <SearchBar
@@ -125,7 +144,7 @@ export default function Script(props: { data: object }): JSX.Element {
                     placeholder='Type words to find'
                     onChange={(e) => handleSearchChange(e)}
                 />
-                {script.map((value: string[], index: number) => {
+                {Object.entries(script.timeTable).map((value: any) => {
                     if (value[1].includes(searchText)) {
                         return (
                             <li key={value[0]}>
@@ -144,36 +163,6 @@ export default function Script(props: { data: object }): JSX.Element {
         );
     };
 
-    const renderWholeScript = () => {
-        return (
-            <span>
-                {script.map((value: string[], index: number) => {
-                    return value[1].concat(' ');
-                })}
-            </span>
-        );
-    };
-
-    const renderTimeTable = () => {
-        return (
-            <ul>
-                {script.map((value: string[], index: number) => {
-                    return (
-                        <li key={value[0]}>
-                            <Button
-                                aria-hidden='true'
-                                onClick={() => handleVideoMoveClick(value[0])}
-                            >
-                                [{value[0]}s]
-                            </Button>
-                            <span> : {value[1]}</span>
-                        </li>
-                    );
-                })}
-            </ul>
-        );
-    };
-
     const renderByIndex = () => {
         switch (tabbedIndex) {
             case 0:
@@ -181,7 +170,7 @@ export default function Script(props: { data: object }): JSX.Element {
             case 1:
                 return renderTimeTable();
             case 2:
-                return renderSearch();
+                return renderSummary();
             default:
                 return renderWholeScript();
         }
@@ -220,8 +209,7 @@ export default function Script(props: { data: object }): JSX.Element {
         return isVideo ? (
             <VideoContainer ref={elementRef}>
                 <ReactPlayer
-                    url={srcAddress}
-                    // url='https://www.youtube.com/watch?v=9Edmy40n7OM&ab_channel=%EC%A7%84%EC%9A%A9%EC%A7%84'
+                    url={script.srcAddress}
                     ref={playerRef}
                     playing={videoPlaying}
                     controls
@@ -237,7 +225,7 @@ export default function Script(props: { data: object }): JSX.Element {
         ) : (
             <AudioContainer>
                 <ReactPlayer
-                    url={srcAddress}
+                    url={script.srcAddress}
                     ref={playerRef}
                     playing={videoPlaying}
                     controls
