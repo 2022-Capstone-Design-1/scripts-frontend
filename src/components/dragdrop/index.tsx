@@ -6,6 +6,7 @@ import { RiFileAddLine } from 'react-icons/ri';
 import { SpinnerDotted } from 'spinners-react';
 import { styled } from '../../stitches.config';
 import { getRandomID, getScript } from '../../api';
+import RectangleButton from '../rectangle_button';
 
 const Container = styled('div', {
     width: '100%',
@@ -68,21 +69,6 @@ const ButtonContainer = styled('div', {
     justifyContent: 'space-between',
     margin: '2rem 0 2rem 0.2rem',
     width: '100%',
-});
-
-const Button = styled('span', {
-    height: '4rem',
-    width: '40%',
-    border: '0.15rem solid $text',
-    borderRadius: '0.2rem',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    cursor: 'pointer',
-    '&:hover': {
-        backgroundColor: '$text',
-        color: '$background',
-    },
 });
 
 const Margin = styled('div', {
@@ -250,12 +236,8 @@ export default function DragDrop(): JSX.Element {
             )}
 
             <ButtonContainer>
-                <Button aria-hidden='true' onClick={() => handleTransformClick()}>
-                    Transform
-                </Button>
-                <Button aria-hidden='true' onClick={handleResetClick}>
-                    Delete
-                </Button>
+                <RectangleButton text='Transform' onClick={() => handleTransformClick()} />
+                <RectangleButton text='Delete' onClick={() => handleResetClick()} />
             </ButtonContainer>
         </Container>
     );
