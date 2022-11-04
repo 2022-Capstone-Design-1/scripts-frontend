@@ -1,8 +1,5 @@
 import { API_END_POINT } from './url';
-
-interface IFileTypes {
-    object: File;
-}
+import { FileType } from './utils/types';
 
 export const getRandomID = (min: number, max: number): number =>
     Math.floor(Math.random() * (max - min) + min);
@@ -39,7 +36,7 @@ const inferenceFile = async (id: string, url: string) => {
     throw new Error(resData);
 };
 
-export const getScript = async (file: IFileTypes[], id: string) => {
+export const getScript = async (file: FileType[], id: string) => {
     const formData = new FormData();
     formData.append('id', id);
     formData.append('file', file[0].object);

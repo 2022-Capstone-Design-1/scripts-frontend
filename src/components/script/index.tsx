@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactPlayer from 'react-player';
 import { styled } from '../../stitches.config';
+import { ScriptDataType } from '../../utils/types';
 
 const VideoContainer = styled('div', {
     position: 'relative',
@@ -95,21 +96,11 @@ const SearchBar = styled('input', {
     },
 });
 
-type scriptDataType = {
-    script: {
-        fullScript: string;
-        srcAddress: string;
-        summary: string;
-        timeTable: object[];
-    };
-    type: string;
-};
-
 const indexList = [{ name: 'Whole script' }, { name: 'Script by time' }, { name: 'Summary' }];
 
-export default function Script(props: { data: scriptDataType }): JSX.Element {
-    const playerRef = React.useRef<ReactPlayer | any>(null);
-    const elementRef = React.useRef<HTMLElement | any>(null);
+export default function Script(props: { data: ScriptDataType }): JSX.Element {
+    const playerRef = React.useRef<ReactPlayer>(null);
+    const elementRef = React.useRef<HTMLDivElement>(null);
 
     const { data } = props;
     const { script, type } = data;
@@ -120,7 +111,7 @@ export default function Script(props: { data: scriptDataType }): JSX.Element {
     const [videoPlaying, setVideoPlaying] = React.useState(false);
 
     const handleVideoMoveClick = (time: string) => {
-        playerRef?.current.seekTo(Number(time), 'seconds');
+        playerRef?.current?.seekTo(Number(time), 'seconds');
         setVideoPlaying(true);
     };
 
@@ -144,7 +135,7 @@ export default function Script(props: { data: scriptDataType }): JSX.Element {
                     placeholder='Type words to find'
                     onChange={(e) => handleSearchChange(e)}
                 />
-                {Object.entries(script.timeTable).map((value: any) => {
+                {Object.entries(script.timeTable).map((value: string[] | any) => {
                     if (value[1].includes(searchText)) {
                         return (
                             <li key={value[0]}>

@@ -7,6 +7,7 @@ import { SpinnerDotted } from 'spinners-react';
 import { styled } from '../../stitches.config';
 import { getRandomID, getScript } from '../../api';
 import RectangleButton from '../rectangle_button';
+import { FileType } from '../../utils/types';
 
 const Container = styled('div', {
     width: '100%',
@@ -76,10 +77,6 @@ const Margin = styled('div', {
     '@lg': { marginTop: '6.5rem' },
 });
 
-interface IFileTypes {
-    object: File;
-}
-
 export default function DragDrop(): JSX.Element {
     const navigate = useNavigate();
     const { theme } = useTheme();
@@ -88,12 +85,12 @@ export default function DragDrop(): JSX.Element {
     const dragRef = React.useRef<HTMLLabelElement | null>(null);
     const fileRef = React.useRef<HTMLInputElement | any>(null);
     // 추후 다중 파일을 받을 수 있기 때문에 리스트로 구현
-    const [file, setFile] = React.useState<IFileTypes[]>([]);
+    const [file, setFile] = React.useState<FileType[]>([]);
 
     const onChangeFile = React.useCallback(
         (e: React.ChangeEvent<HTMLInputElement> | any): void => {
             let selectedFiles: File[] = [];
-            let tempFile: IFileTypes[] = file;
+            let tempFile: FileType[] = file;
 
             selectedFiles = e.type === 'change' ? e.target.files : e.dataTransfer.files;
             if (selectedFiles.length > 1) {

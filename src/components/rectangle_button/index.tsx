@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { styled } from '../../stitches.config';
+import { RectangleButtonType } from '../../utils/types';
 
 const Button = styled('span', {
     height: '4rem',
@@ -16,12 +17,7 @@ const Button = styled('span', {
     },
 });
 
-type rectangleButtonType = {
-    text: string;
-    onClick: React.MouseEventHandler<HTMLButtonElement>;
-};
-
-export default function RectangleButton(props: rectangleButtonType): JSX.Element {
+export default function RectangleButton(props: RectangleButtonType): JSX.Element {
     const { text, onClick } = props;
     return (
         <Button aria-hidden='true' onClick={onClick}>
