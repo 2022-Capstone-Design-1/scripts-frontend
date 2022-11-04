@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
-import { Add, Close, GitHub, EmailOutlined, LightbulbOutlined } from '@mui/icons-material';
+import { Add, Close, GitHub, EmailOutlined } from '@mui/icons-material';
 import { useTheme } from 'next-themes';
 import { styled } from '../../../stitches.config';
 
@@ -23,7 +23,6 @@ const site = 'https://github.com/2022-CNU-Capstone-Design-1/scripts-frontend';
 export default function FloatingActionButton() {
     const [visible, setVisible] = React.useState(false);
     const { theme } = useTheme();
-    // const toggleTheme = () => setTheme(theme === 'light' ? 'dark' : 'light');
     const iconColor = theme === 'light' ? 'white' : 'black';
     const bgColor = theme === 'dark' ? 'white' : 'black';
 
@@ -41,13 +40,6 @@ export default function FloatingActionButton() {
                     >
                         <Close onClick={() => setVisible(!visible)} />
                     </Fab>
-                    {/* <Fab
-                        size='medium'
-                        aria-label='lightbulb'
-                        style={{ color: `${iconColor}`, backgroundColor: `${bgColor}` }}
-                    >
-                        <LightbulbOutlined onClick={() => toggleTheme()} />
-                    </Fab> */}
                     <Fab
                         size='medium'
                         aria-label='github'
