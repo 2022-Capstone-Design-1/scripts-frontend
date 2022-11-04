@@ -1,8 +1,9 @@
-import React from 'react';
 import { useTheme } from 'next-themes';
+import React from 'react';
 import { BiBulb } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '../../../stitches.config';
+import { APP } from '../../../utils/constants';
 
 const Container = styled('div', {
     borderBottom: '2px solid $text',
@@ -25,26 +26,23 @@ const Bulb = styled(BiBulb, {
     '@lg': { width: '1.8rem', height: '1.8rem' },
 });
 
-const Logo = styled('img', {
+const Logo = styled('h1', {
     margin: '0 2rem',
-    width: '4rem',
+    fontSize: '2rem',
+    letterSpacing: '-0.4rem',
     height: '2rem',
     cursor: 'pointer',
-    '@lg': { width: '5rem', height: '2.5rem' },
+    '@lg': { fontSize: '3rem', height: '3rem' },
 });
 
 export default function Header(): JSX.Element {
     const { theme, setTheme } = useTheme();
-    const toggleTheme = () => setTheme(theme === 'light' ? 'orange' : 'light');
+    const toggleTheme = () => setTheme(theme === 'light' ? 'dark' : 'light');
     const navigate = useNavigate();
 
     return (
         <Container>
-            <Logo
-                src={require(`../../../assets/images/${theme}logo.png`)}
-                alt='Logo'
-                onClick={() => navigate('/')}
-            />
+            <Logo onClick={() => navigate('/')}>{APP}</Logo>
             <Bulb onClick={toggleTheme} />
         </Container>
     );

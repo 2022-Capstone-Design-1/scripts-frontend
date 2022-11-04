@@ -1,11 +1,14 @@
-import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useTheme } from 'next-themes';
+import * as React from 'react';
 import { BsTrash } from 'react-icons/bs';
 import { RiFileAddLine } from 'react-icons/ri';
+import { useNavigate } from 'react-router-dom';
 import { SpinnerDotted } from 'spinners-react';
 import { styled } from '../../stitches.config';
-import { uploadFile, getRandomID } from '../../api';
+import { getRandomID, getScript } from '../../utils/api';
+import { RENDER_TEXT, WARNING_TEXT } from '../../utils/constants';
+import { FileType } from '../../utils/types';
+import RectangleButton from '../rectangle_button';
 
 const Container = styled('div', {
     width: '100%',
@@ -70,29 +73,10 @@ const ButtonContainer = styled('div', {
     width: '100%',
 });
 
-const Button = styled('span', {
-    height: '4rem',
-    width: '40%',
-    border: '0.15rem solid $text',
-    borderRadius: '0.2rem',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    cursor: 'pointer',
-    '&:hover': {
-        backgroundColor: '$text',
-        color: '$background',
-    },
-});
-
 const Margin = styled('div', {
     marginTop: '10rem',
     '@lg': { marginTop: '6.5rem' },
 });
-
-interface IFileTypes {
-    object: File;
-}
 
 export default function DragDrop(): JSX.Element {
     const navigate = useNavigate();
@@ -102,21 +86,21 @@ export default function DragDrop(): JSX.Element {
     const dragRef = React.useRef<HTMLLabelElement | null>(null);
     const fileRef = React.useRef<HTMLInputElement | any>(null);
     // 추후 다중 파일을 받을 수 있기 때문에 리스트로 구현
-    const [file, setFile] = React.useState<IFileTypes[]>([]);
+    const [file, setFile] = React.useState<FileType[]>([]);
 
     const onChangeFile = React.useCallback(
         (e: React.ChangeEvent<HTMLInputElement> | any): void => {
             let selectedFiles: File[] = [];
-            let tempFile: IFileTypes[] = file;
+            let tempFile: FileType[] = file;
 
             selectedFiles = e.type === 'change' ? e.target.files : e.dataTransfer.files;
             if (selectedFiles.length > 1) {
-                alert('변환할 파일은 한 개만 등록 가능합니다.');
+                alert(WARNING_TEXT.ADD_MORE_THAN_ONE);
             } else if (
                 !selectedFiles[0].type.includes('video/') &&
                 !selectedFiles[0].type.includes('audio/')
             ) {
-                alert('파일은 반드시 동영상 또는 오디오 확장자로 제한됩니다.');
+                alert(WARNING_TEXT.FILE_EXTENSION);
             } else {
                 tempFile = [
                     {
@@ -136,18 +120,19 @@ export default function DragDrop(): JSX.Element {
 
     const handleTransformClick = async () => {
         if (file.length === 0) {
-            alert('변환할 파일을 등록해주세요.');
+            alert(WARNING_TEXT.NO_FILE);
         } else {
             setLoading(true);
             const randomID = new Date()
                 .getTime()
                 .toString()
                 .concat(getRandomID(1, 100000).toString());
-            const data = await uploadFile(file, randomID);
-            const fileType = file[0].object.type;
+            const data = await getScript(file, randomID);
+            const fileType: string = file[0].object.type;
+
             setFile([]);
             navigate(`/script/${randomID}`, {
-                state: { script: JSON.parse(data), type: fileType },
+                state: { script: data, type: fileType },
             });
         }
         setLoading(false);
@@ -169,7 +154,7 @@ export default function DragDrop(): JSX.Element {
         e.preventDefault();
         e.stopPropagation();
 
-        if (e.dataTransfer!.files) {
+        if (e.dataTransfer?.files) {
             setIsDragging(true);
         }
     }, []);
@@ -209,7 +194,7 @@ export default function DragDrop(): JSX.Element {
     }, [subscribeDragEvents, unSubscribeDragEvents]);
 
     if (loading) {
-        const loadingColor = theme === 'light' ? '#FFA42B' : 'white';
+        const loadingColor = theme === 'light' ? 'black' : 'white';
         return (
             <>
                 <Margin />
@@ -236,7 +221,7 @@ export default function DragDrop(): JSX.Element {
                 ref={dragRef}
             >
                 <AddFile />
-                <AddFileText>Select / Drag & Drop your file to transform</AddFileText>
+                <AddFileText>${RENDER_TEXT.SELECT_FILE}</AddFileText>
             </Label>
 
             {file.length !== 0 && (
@@ -249,12 +234,14 @@ export default function DragDrop(): JSX.Element {
             )}
 
             <ButtonContainer>
-                <Button aria-hidden='true' onClick={() => handleTransformClick()}>
-                    Transform
-                </Button>
-                <Button aria-hidden='true' onClick={handleResetClick}>
-                    Delete
-                </Button>
+                <RectangleButton
+                    text={RENDER_TEXT.BUTTON.TRANSFORM}
+                    onClick={() => handleTransformClick()}
+                />
+                <RectangleButton
+                    text={RENDER_TEXT.BUTTON.DELETE}
+                    onClick={() => handleResetClick()}
+                />
             </ButtonContainer>
         </Container>
     );
