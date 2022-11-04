@@ -4,6 +4,7 @@ import Fab from '@mui/material/Fab';
 import { Add, Close, GitHub, EmailOutlined } from '@mui/icons-material';
 import { useTheme } from 'next-themes';
 import { styled } from '../../../stitches.config';
+import { ADDRESS, EMAIL } from '../../../utils/constants';
 
 const Container = styled(Box, {
     '& > :not(style)': { m: 1 },
@@ -17,9 +18,6 @@ const Container = styled(Box, {
     height: '11rem',
 });
 
-const email = 'rjsduf0503@gmail.com';
-const site = 'https://github.com/2022-CNU-Capstone-Design-1/scripts-frontend';
-
 export default function FloatingActionButton() {
     const [visible, setVisible] = React.useState(false);
     const { theme } = useTheme();
@@ -27,7 +25,7 @@ export default function FloatingActionButton() {
     const bgColor = theme === 'dark' ? 'white' : 'black';
 
     const handleMailClick = () => {
-        alert(`${email}이 복사되었습니다.`);
+        alert(`${EMAIL}이 복사되었습니다.`);
     };
 
     return (
@@ -45,7 +43,7 @@ export default function FloatingActionButton() {
                         aria-label='github'
                         style={{ color: `${iconColor}`, backgroundColor: `${bgColor}` }}
                     >
-                        <GitHub onClick={() => window.open(site, '_blank')} />
+                        <GitHub onClick={() => window.open(ADDRESS, '_blank')} />
                     </Fab>
                     <Fab
                         size='medium'

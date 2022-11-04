@@ -1,12 +1,12 @@
-import { API_END_POINT } from './url';
-import { FileType } from './utils/types';
+import { API_END_POINT, TYPE_CHECK, METHOD } from './constants';
+import { FileType } from './types';
 
 export const getRandomID = (min: number, max: number): number =>
     Math.floor(Math.random() * (max - min) + min);
 
 const uploadFile = async (formData: FormData, url: string) => {
     const options = {
-        method: 'POST',
+        method: METHOD.POST,
         body: formData,
     };
 
@@ -22,7 +22,7 @@ const uploadFile = async (formData: FormData, url: string) => {
 
 const inferenceFile = async (id: string, url: string) => {
     const options = {
-        method: 'POST',
+        method: METHOD.POST,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: id }),
     };
@@ -40,7 +40,9 @@ export const getScript = async (file: FileType[], id: string) => {
     const formData = new FormData();
     formData.append('id', id);
     formData.append('file', file[0].object);
-    const type = file[0].object.type.includes('video/') ? ['video', 'Video'] : ['audio', 'Audio'];
+    const type = file[0].object.type.includes(TYPE_CHECK.VIDEO)
+        ? ['video', 'Video']
+        : ['audio', 'Audio'];
 
     await uploadFile(formData, `/${type[0]}/post${type[1]}`);
     const data = await inferenceFile(id, `/${type[0]}/inferenceAudio`);

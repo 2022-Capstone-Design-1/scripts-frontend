@@ -3,6 +3,7 @@ import { useTheme } from 'next-themes';
 import { BiBulb } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '../../../stitches.config';
+import { APP } from '../../../utils/constants';
 
 const Container = styled('div', {
     borderBottom: '2px solid $text',
@@ -41,7 +42,7 @@ export default function Header(): JSX.Element {
 
     return (
         <Container>
-            <Logo onClick={() => navigate('/')}>VTS</Logo>
+            <Logo onClick={() => navigate('/')}>{APP}</Logo>
             <Bulb onClick={toggleTheme} />
         </Container>
     );

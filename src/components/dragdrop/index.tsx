@@ -1,13 +1,14 @@
-import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useTheme } from 'next-themes';
+import * as React from 'react';
 import { BsTrash } from 'react-icons/bs';
 import { RiFileAddLine } from 'react-icons/ri';
+import { useNavigate } from 'react-router-dom';
 import { SpinnerDotted } from 'spinners-react';
 import { styled } from '../../stitches.config';
-import { getRandomID, getScript } from '../../api';
-import RectangleButton from '../rectangle_button';
+import { getRandomID, getScript } from '../../utils/api';
+import { RENDER_TEXT, WARNING_TEXT } from '../../utils/constants';
 import { FileType } from '../../utils/types';
+import RectangleButton from '../rectangle_button';
 
 const Container = styled('div', {
     width: '100%',
@@ -94,12 +95,12 @@ export default function DragDrop(): JSX.Element {
 
             selectedFiles = e.type === 'change' ? e.target.files : e.dataTransfer.files;
             if (selectedFiles.length > 1) {
-                alert('변환할 파일은 한 개만 등록 가능합니다.');
+                alert(WARNING_TEXT.ADD_MORE_THAN_ONE);
             } else if (
                 !selectedFiles[0].type.includes('video/') &&
                 !selectedFiles[0].type.includes('audio/')
             ) {
-                alert('파일은 반드시 동영상 또는 오디오 확장자로 제한됩니다.');
+                alert(WARNING_TEXT.FILE_EXTENSION);
             } else {
                 tempFile = [
                     {
@@ -119,7 +120,7 @@ export default function DragDrop(): JSX.Element {
 
     const handleTransformClick = async () => {
         if (file.length === 0) {
-            alert('변환할 파일을 등록해주세요.');
+            alert(WARNING_TEXT.NO_FILE);
         } else {
             setLoading(true);
             const randomID = new Date()
@@ -220,7 +221,7 @@ export default function DragDrop(): JSX.Element {
                 ref={dragRef}
             >
                 <AddFile />
-                <AddFileText>Select / Drag & Drop your file to transform</AddFileText>
+                <AddFileText>${RENDER_TEXT.SELECT_FILE}</AddFileText>
             </Label>
 
             {file.length !== 0 && (
@@ -233,8 +234,14 @@ export default function DragDrop(): JSX.Element {
             )}
 
             <ButtonContainer>
-                <RectangleButton text='Transform' onClick={() => handleTransformClick()} />
-                <RectangleButton text='Delete' onClick={() => handleResetClick()} />
+                <RectangleButton
+                    text={RENDER_TEXT.BUTTON.TRANSFORM}
+                    onClick={() => handleTransformClick()}
+                />
+                <RectangleButton
+                    text={RENDER_TEXT.BUTTON.DELETE}
+                    onClick={() => handleResetClick()}
+                />
             </ButtonContainer>
         </Container>
     );

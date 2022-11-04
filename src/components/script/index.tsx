@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactPlayer from 'react-player';
 import { styled } from '../../stitches.config';
+import { SCRIPT_TAB, SEARCH_PLACEHOLDER, TYPE_CHECK } from '../../utils/constants';
 import { ScriptDataType } from '../../utils/types';
 
 const VideoContainer = styled('div', {
@@ -96,7 +97,7 @@ const SearchBar = styled('input', {
     },
 });
 
-const indexList = [{ name: 'Whole script' }, { name: 'Script by time' }, { name: 'Summary' }];
+// const indexList = [{ name: 'Whole script' }, { name: 'Script by time' }, { name: 'Summary' }];
 
 export default function Script(props: { data: ScriptDataType }): JSX.Element {
     const playerRef = React.useRef<ReactPlayer>(null);
@@ -104,7 +105,7 @@ export default function Script(props: { data: ScriptDataType }): JSX.Element {
 
     const { data } = props;
     const { script, type } = data;
-    const isVideo = type.includes('video/');
+    const isVideo = type.includes(TYPE_CHECK.VIDEO);
 
     const [tabbedIndex, setTabbedIndex] = React.useState(0);
     const [searchText, setSearchText] = React.useState('');
@@ -132,7 +133,7 @@ export default function Script(props: { data: ScriptDataType }): JSX.Element {
             <div>
                 <SearchBar
                     type='text'
-                    placeholder='Type words to find'
+                    placeholder={SEARCH_PLACEHOLDER}
                     onChange={(e) => handleSearchChange(e)}
                 />
                 {Object.entries(script.timeTable).map((value: string[] | any) => {
@@ -171,7 +172,7 @@ export default function Script(props: { data: ScriptDataType }): JSX.Element {
         return (
             <>
                 <TabContainer>
-                    {indexList.map((item, index: number) => {
+                    {SCRIPT_TAB.map((item, index: number) => {
                         return tabbedIndex === index ? (
                             <Button
                                 className='Clicked'
