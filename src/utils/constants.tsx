@@ -1,4 +1,4 @@
-export const API_END_POINT = 'https://6ae9-168-188-124-217.jp.ngrok.io';
+export const API_END_POINT = 'https://f9c8-106-101-1-109.jp.ngrok.io';
 export const WARNING_TEXT = {
     ADD_MORE_THAN_ONE: '변환할 파일은 한 개만 등록 가능합니다.',
     NO_FILE: '변환할 파일을 등록해주세요.',

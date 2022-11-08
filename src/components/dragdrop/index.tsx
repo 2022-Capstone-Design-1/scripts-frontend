@@ -28,7 +28,7 @@ const Label = styled('label', {
     cursor: 'pointer',
     border: '0.15rem solid $text',
     borderRadius: '1rem',
-    '@lg': { minHeight: 'calc(85vh - 5rem)' },
+    // '@lg': { minHeight: 'calc(85vh - 5rem)' },
     '&.File-Dragging': {
         backgroundColor: '$text',
         color: '$background',
@@ -221,7 +221,7 @@ export default function DragDrop(): JSX.Element {
                 ref={dragRef}
             >
                 <AddFile />
-                <AddFileText>${RENDER_TEXT.SELECT_FILE}</AddFileText>
+                <AddFileText>{RENDER_TEXT.SELECT_FILE}</AddFileText>
             </Label>
 
             {file.length !== 0 && (
